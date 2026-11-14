@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chaitanya Avala Portfolio</title>
+<meta name="description" content="Chaitanya Avala, software engineer at Snapmint. Payments, compilers and machine learning. IIT Roorkee CSE 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a compiler listing. One wide column on a ruled grid; dates and labels sit in a
+   mono gutter on the left like line numbers; the hero is a live five-stage compile of a toy function. */
+:root {
+  --paper: #f1f3f7;
+  --band: #e4e9f2;
+  --ink: #131a2b;
+  --muted: #56607a;
+  --rule: #c9d0de;
+  --accent: #2440d8;
+  --signal: #a85d00;
+  --h1: #2440d8;
+  --h2: #c2410c;
+  --h3: #7c3aed;
+  --h4: #0f766e;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --gutter: 9.5rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e1320;
+    --band: #171e31;
+    --ink: #e6eaf5;
+    --muted: #97a2bd;
+    --rule: #2b3550;
+    --accent: #93a5ff;
+    --signal: #f0b35a;
+    --h1: #93a5ff;
+    --h2: #fb923c;
+    --h3: #b79bff;
+    --h4: #4fd1c5;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e1320;
+  --band: #171e31;
+  --ink: #e6eaf5;
+  --muted: #97a2bd;
+  --rule: #2b3550;
+  --accent: #93a5ff;
+  --signal: #f0b35a;
+    --h1: #93a5ff;
+    --h2: #fb923c;
+    --h3: #b79bff;
+    --h4: #4fd1c5;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+a { color: inherit; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: 0.2em; }
+a:hover { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+h1, h2, h3, p, ul, ol, dl, dd { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+h1, h2, h3 { text-wrap: balance; }
+
+.wrap { max-width: 70rem; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2.5rem); }
+
+/* ---------- top bar ---------- */
+.top {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding-top: 0.7rem; padding-bottom: 0.7rem; }
+.mark { font-family: var(--mono); font-weight: 600; font-size: 0.9rem; text-decoration: none; letter-spacing: 0.02em; }
+.mark span { color: var(--accent); }
+.top nav ul { display: flex; gap: clamp(0.9rem, 3vw, 1.75rem); flex-wrap: wrap; }
+.top nav a { font-family: var(--mono); font-size: 0.82rem; text-decoration: none; color: var(--muted); }
+.top nav a:hover { color: var(--accent); }
+
+/* ---------- hero ---------- */
+.hero { padding: clamp(2.5rem, 7vw, 5rem) 0 clamp(2.5rem, 6vw, 4rem); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+.id { display: flex; align-items: flex-end; gap: 1.1rem; margin-bottom: 1.4rem; }
+.portrait { width: 7.5rem; height: auto; aspect-ratio: 4 / 5; object-fit: cover; flex: none; border: 1.5px solid var(--ink); border-radius: 4px; background: #fff; }
+.hero .wrap > div:first-child { container-type: inline-size; min-width: 0; }
+.role { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); line-height: 1.6; padding-bottom: 0.2rem; }
+.role b { color: var(--accent); font-weight: 600; }
+h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 15vw, 6rem);
+  font-size: clamp(2.6rem, 15cqi, 6rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.fullname { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin-top: 0.9rem; }
+.lede { margin-top: 1.6rem; max-width: 34rem; font-size: 1.15rem; line-height: 1.55; }
+.links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.8rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--mono); font-size: 0.85rem; font-weight: 500;
+  padding: 0.6rem 0.95rem;
+  border: 1.5px solid var(--ink); border-radius: 3px;
+  background: transparent; color: var(--ink);
+  text-decoration: none; cursor: pointer;
+  transition: background-color .15s, color .15s, border-color .15s;
+}
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.btn.primary:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+/* ---------- compiler panel ---------- */
+.compiler { border: 1.5px solid var(--ink); border-radius: 4px; background: var(--paper); min-width: 0; }
+.stages { display: flex; border-bottom: 1.5px solid var(--ink); overflow-x: auto; }
+.stages button {
+  flex: 1 0 auto;
+  font-family: var(--mono); font-size: 0.78rem; font-weight: 500;
+  padding: 0.65rem 0.8rem;
+  background: transparent; color: var(--muted);
+  border: 0; border-right: 1px solid var(--rule);
+  cursor: pointer; white-space: nowrap;
+}
+.stages button:last-child { border-right: 0; }
+.stages button:hover { color: var(--ink); }
+.stages button[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+.stages button:focus-visible { outline-offset: -3px; }
+.listing {
+  margin: 0; padding: 0.4rem 0;
+  font-family: var(--mono); font-size: 0.84rem; line-height: 1.75;
+  min-height: calc(1.75em * 13 + 0.8rem);
+  overflow-x: auto;
+  counter-reset: ln;
+  font-variant-numeric: tabular-nums;
+}
+.listing .ln { display: block; padding: 0 1rem 0 0; white-space: pre; counter-increment: ln; min-width: max-content; }
+.listing .ln::before {
+  content: counter(ln, decimal-leading-zero);
+  display: inline-block; width: 2.6rem; padding-right: 0.8rem; margin-right: 0.9rem;
+  text-align: right; color: var(--muted); border-right: 1px solid var(--rule);
+}
+.listing .ln:nth-child(even) { background: var(--band); }
+.listing .c { color: var(--muted); }
+.listing .k { color: var(--accent); font-weight: 500; }
+.panel-note { border-top: 1px solid var(--rule); padding: 0.6rem 1rem; font-size: 0.82rem; color: var(--muted); line-height: 1.45; }
+@media (prefers-reduced-motion: no-preference) {
+  .listing.swap .ln { animation: feed .28s both; animation-delay: calc(var(--i) * 22ms); }
+  @keyframes feed { from { opacity: .15; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+}
+
+/* ---------- figures strip ---------- */
+.figures { border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+.figures ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.figures li { padding: 1.3rem 1.25rem 1.4rem; border-right: 1px solid var(--rule); }
+.figures li:first-child { padding-left: 0; }
+.figures li:last-child { border-right: 0; }
+.figures .n { font-family: var(--display); font-weight: 600; font-size: clamp(2rem, 4.2vw, 2.9rem); line-height: 1; color: var(--h1); font-variant-numeric: tabular-nums; }
+.figures li:nth-child(2) .n { color: var(--h2); }
+.figures li:nth-child(3) .n { color: var(--h3); }
+.figures li:nth-child(4) .n { color: var(--h4); }
+.figures .l { display: block; margin-top: 0.5rem; font-size: 0.88rem; color: var(--muted); line-height: 1.4; }
+
+/* ---------- sections ---------- */
+section.block { padding: clamp(3rem, 7vw, 5rem) 0 0; scroll-margin-top: 3.5rem; }
+h2 {
+  font-family: var(--display); font-weight: 700; text-transform: uppercase;
+  font-size: clamp(1.9rem, 4.5vw, 2.8rem); line-height: 1; letter-spacing: -0.01em;
+  padding-bottom: 1rem; border-bottom: 1.5px solid var(--ink);
+}
+.row {
+  display: grid; grid-template-columns: var(--gutter) minmax(0, 1fr); gap: 0.5rem 2rem;
+  padding: 1.6rem 0; border-bottom: 1px solid var(--rule);
+}
+.when { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); padding-top: 0.3rem; font-variant-numeric: tabular-nums; line-height: 1.5; }
+.row h3 { font-family: var(--body); font-weight: 600; font-size: 1.25rem; line-height: 1.3; }
+.sub { font-size: 0.95rem; color: var(--muted); margin-top: 0.15rem; }
+.row .body { max-width: 42rem; }
+.points { margin-top: 0.8rem; display: grid; gap: 0.55rem; }
+.points li { padding-left: 1.1rem; position: relative; }
+.points li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 0.5rem; height: 1.5px; background: var(--accent); }
+.points strong { font-weight: 600; color: var(--signal); }
+.tags { display: flex; flex-wrap: wrap; gap: 0.35rem 0.45rem; margin-top: 0.9rem; }
+.tags li { font-family: var(--mono); font-size: 0.76rem; padding: 0.12rem 0.5rem; border: 1px solid var(--rule); border-radius: 2px; color: var(--muted); }
+
+/* projects: each one carries its own hue */
+.proj {
+  --hue: var(--h1);
+  margin-top: 1.8rem;
+  border: 1.5px solid var(--ink); border-top: 8px solid var(--hue); border-radius: 4px;
+  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  background: var(--paper);
+  background: color-mix(in srgb, var(--hue) 5%, var(--paper));
+}
+.proj.c2 { --hue: var(--h2); } .proj.c3 { --hue: var(--h3); } .proj.c4 { --hue: var(--h4); }
+.proj.wide { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
+.proj .txt { padding: clamp(1.25rem, 3vw, 2rem); }
+.proj .kicker { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--hue); }
+.proj h3 { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(1.6rem, 3.4vw, 2.2rem); line-height: 1.02; margin-top: 0.5rem; }
+.proj .txt > p { margin-top: 0.9rem; max-width: 34rem; }
+.proj .points li::before { background: var(--hue); height: 2px; }
+.proj .points strong { color: var(--hue); }
+.proj .tags li { color: var(--ink); border-color: var(--hue); border-color: color-mix(in srgb, var(--hue) 50%, var(--paper)); background: var(--paper); }
+.proj .code { display: inline-flex; margin-top: 1.2rem; font-family: var(--mono); font-size: 0.85rem; font-weight: 500; }
+.proj .code:hover { color: var(--hue); }
+.proj .code { text-decoration-color: var(--hue); }
+.proj .vis {
+  border-left: 1.5px solid var(--ink);
+  background: var(--band);
+  background: color-mix(in srgb, var(--hue) 15%, var(--paper));
+  padding: clamp(1.25rem, 3vw, 2rem);
+  display: grid; align-content: center; gap: 1rem; min-width: 0;
+}
+.vis .cap { font-size: 0.82rem; color: var(--muted); line-height: 1.45; }
+.pipeline { display: grid; counter-reset: st; }
+.pipeline li { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr); gap: 0.2rem 0.6rem; padding: 0.55rem 0; border-bottom: 1px dashed var(--hue); counter-increment: st; }
+.pipeline li:last-child { border-bottom: 0; }
+.pipeline li::before { content: counter(st, decimal-leading-zero); font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--hue); padding-top: 0.2rem; }
+.pipeline b { font-weight: 600; }
+.pipeline span { display: block; font-size: 0.88rem; color: var(--muted); line-height: 1.4; }
+.meter { display: grid; gap: 0.4rem; }
+.meter h4 { margin: 0 0 0.2rem; font-family: var(--body); font-size: 0.95rem; font-weight: 600; }
+.meter h4 small { font-weight: 400; color: var(--muted); font-size: 0.82rem; }
+.bar { display: grid; grid-template-columns: 6.2rem minmax(0, 1fr) 2.2rem; align-items: center; gap: 0.6rem; font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+.bar .track { display: block; }
+.bar .track i { display: block; height: 1rem; border-radius: 2px; width: var(--w); background: var(--muted); opacity: 0.55; }
+.bar.ours .track i { background: var(--hue); opacity: 1; }
+.bar.ours { font-weight: 600; }
+.bar b { text-align: right; font-weight: inherit; }
+.phones { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.7rem; }
+.phones img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1.5px solid var(--ink); background: #fff; }
+.seats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.4rem; max-width: 19rem; }
+.seats i { display: block; aspect-ratio: 4 / 3; border-radius: 3px; background: var(--hue); }
+.seats i.off { background: transparent; border: 1.5px dashed var(--hue); }
+.key { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; font-family: var(--mono); font-size: 0.76rem; color: var(--muted); }
+.key i { display: inline-block; width: 0.8rem; height: 0.6rem; border-radius: 2px; background: var(--hue); margin-right: 0.35rem; }
+.key i.off { background: transparent; border: 1.5px dashed var(--hue); }
+.pill { display: inline-block; vertical-align: middle; margin-left: 0.5rem; font-family: var(--mono); font-size: 0.7rem; font-weight: 600; padding: 0.1rem 0.5rem; border-radius: 99px; background: var(--h4); color: var(--paper); }
+
+/* skills */
+.skills { display: grid; }
+.skills > div { --hue: var(--h1); display: grid; grid-template-columns: var(--gutter) minmax(0, 1fr); gap: 0.5rem 2rem; padding: 1.1rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.skills > div:nth-child(2) { --hue: var(--h4); }
+.skills > div:nth-child(3) { --hue: var(--h2); }
+.skills > div:nth-child(4) { --hue: var(--h3); }
+.skills > div:nth-child(5) { --hue: var(--signal); }
+.skills dt { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+.skills dt::before { content: ""; display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 2px; background: var(--hue); margin-right: 0.5rem; }
+.skills dd { display: flex; flex-wrap: wrap; gap: 0.4rem 0.45rem; }
+.skills dd span {
+  font-size: 0.98rem; padding: 0.2rem 0.7rem; border-radius: 3px;
+  border: 1px solid var(--hue);
+  border-color: color-mix(in srgb, var(--hue) 45%, var(--paper));
+  background: color-mix(in srgb, var(--hue) 12%, var(--paper));
+}
+
+/* education + achievements */
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); }
+.two h2 { font-size: clamp(1.6rem, 3.6vw, 2.2rem); }
+.edu { padding-top: 1.5rem; }
+.edu h3 { font-family: var(--body); font-weight: 600; font-size: 1.25rem; line-height: 1.3; }
+.edu .when { margin-top: 0.6rem; }
+.ach li { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.ach .n { font-family: var(--display); font-weight: 600; font-size: 1.5rem; line-height: 1; color: var(--signal); font-variant-numeric: tabular-nums; }
+.ach span { font-size: 0.98rem; }
+
+/* contact */
+.contact { margin-top: clamp(3rem, 7vw, 5rem); background: var(--ink); color: var(--paper); scroll-margin-top: 3.5rem; }
+.contact .wrap { padding-top: clamp(2.5rem, 6vw, 4.5rem); padding-bottom: clamp(2.5rem, 6vw, 4.5rem); }
+.contact h2 { border: 0; padding: 0; font-size: clamp(2.4rem, 7vw, 4.8rem); line-height: 0.95; }
+.contact p { margin-top: 1.2rem; max-width: 36rem; opacity: 0.85; }
+.mail { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1rem; margin-top: 2rem; }
+.mail a.addr { font-family: var(--mono); font-size: clamp(1rem, 3.4vw, 1.5rem); font-weight: 500; overflow-wrap: anywhere; text-decoration-color: currentColor; }
+.contact a:hover { color: var(--paper); opacity: 0.75; }
+.contact .btn { border-color: var(--paper); color: var(--paper); }
+.contact .btn:hover { background: var(--paper); color: var(--ink); opacity: 1; }
+.contact :focus-visible { outline-color: var(--paper); }
+.elsewhere { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.4rem; }
+footer { font-family: var(--mono); font-size: 0.78rem; opacity: 0.6; margin-top: 3rem; }
+
+/* ---------- narrow ---------- */
+@media (max-width: 860px) {
+  .hero .wrap, .proj, .proj.wide, .two { grid-template-columns: minmax(0, 1fr); }
+  .proj .vis { border-left: 0; border-top: 1.5px solid var(--ink); }
+  .figures ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .figures li { padding-left: 0; border-right: 0; border-bottom: 1px solid var(--rule); }
+  .figures li:nth-child(odd) { border-right: 1px solid var(--rule); padding-right: 1rem; }
+  .figures li:nth-child(even) { padding-left: 1rem; }
+  .figures li:nth-last-child(-n+2) { border-bottom: 0; }
+}
+@media (max-width: 620px) {
+  :root { --gutter: 1fr; }
+  .row, .skills > div { grid-template-columns: minmax(0, 1fr); gap: 0.3rem; }
+  .when { padding-top: 0; }
+  .listing { font-size: 0.76rem; }
+  .phones { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 20rem; }
+  .bar { grid-template-columns: 5.4rem minmax(0, 1fr) 2.2rem; }
+  .top nav a { font-size: 0.78rem; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">chaitanya<span>.</span>avala</a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#work">work</a></li>
+        <li><a href="#projects">projects</a></li>
+        <li><a href="#skills">skills</a></li>
+        <li><a href="#contact">contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="id">
+        <img class="portrait" src="photo.jpg" alt="Portrait of Chaitanya Avala" width="480" height="600">
+        <p class="role"><b>Software Engineer</b><br>at Snapmint, Bengaluru</p>
+      </div>
+      <h1>Chaitanya Avala</h1>
+      <p class="fullname">Avala Chaitanya Lakshmi Prakash Yadav</p>
+      <p class="lede">I build payment features for Snapmint's checkout, across a Next.js frontend and a Node.js backend. Before that I wrote a C++ to x86 compiler from scratch and trained reinforcement learning models at IIT Roorkee.</p>
+      <div class="links">
+        <a class="btn primary" href="#contact">Get in touch</a>
+        <a class="btn" href="https://github.com/avalachaitanya2004" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/chaitanya-avala-59592b2a3" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="compiler">
+      <div class="stages" role="tablist" aria-label="Compiler stages">
+        <button role="tab" id="tab-0" aria-controls="listing" aria-selected="true">source.cpp</button>
+        <button role="tab" id="tab-1" aria-controls="listing" aria-selected="false" tabindex="-1">tokens</button>
+        <button role="tab" id="tab-2" aria-controls="listing" aria-selected="false" tabindex="-1">ast</button>
+        <button role="tab" id="tab-3" aria-controls="listing" aria-selected="false" tabindex="-1">tac</button>
+        <button role="tab" id="tab-4" aria-controls="listing" aria-selected="false" tabindex="-1">x86.asm</button>
+      </div>
+      <pre class="listing" id="listing" role="tabpanel" aria-labelledby="tab-0" tabindex="0"><span class="ln"><span class="c">// one function, five stages</span></span><span class="ln"> </span><span class="ln"><span class="k">int</span> ship(<span class="k">int</span> orders) {</span><span class="ln">    <span class="k">int</span> uplift = orders / 100;</span><span class="ln">    <span class="k">return</span> orders + uplift;</span><span class="ln">}</span></pre>
+      <p class="panel-note" id="note">The five stages my compiler runs, shown on a toy function. Pick a stage to follow the code down to assembly. Illustrative, not captured output.</p>
+    </div>
+  </div>
+</section>
+
+<section class="figures" aria-label="Results in numbers">
+  <div class="wrap">
+    <ul>
+      <li><span class="n">80–120</span><span class="l">extra orders a day projected from UPI options I helped add for iOS</span></li>
+      <li><span class="n">32%</span><span class="l">lower energy use than CNN baselines in my edge-offloading DRL model</span></li>
+      <li><span class="n">1357</span><span class="l">All India Rank, JEE Advanced 2022</span></li>
+      <li><span class="n">1475</span><span class="l">peak Codeforces rating, Specialist</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="block" id="work">
+  <div class="wrap">
+    <h2>Work</h2>
+
+    <article class="row">
+      <p class="when">Jun 2026 – now<br>Bengaluru</p>
+      <div class="body">
+        <h3>Snapmint <span class="pill">Current</span></h3>
+        <p class="sub">Backend Software Engineer I (SDE-1)</p>
+        <ul class="points">
+          <li>Helped add more UPI options for iOS users. The change is projected to lift new-user conversion by <strong>about 1%</strong> and bring in <strong>80–120 more orders a day</strong>.</li>
+          <li>Building an experimental payment flow that sends users to external payment gateways as an alternative to Snapmint's existing flow.</li>
+          <li>Shipping payment features in the checkout service, on both the Next.js frontend and the Node.js backend.</li>
+        </ul>
+        <ul class="tags"><li>Node.js</li><li>Next.js</li><li>TypeScript</li><li>Payments</li></ul>
+      </div>
+    </article>
+
+    <article class="row">
+      <p class="when">Feb 2025 – now<br>Freelance</p>
+      <div class="body">
+        <h3>Outlier.ai</h3>
+        <p class="sub">AI Training Contributor</p>
+        <ul class="points">
+          <li>Complete freelance AI-training tasks to task-specific instructions and quality requirements.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="row">
+      <p class="when">May – Jul 2025<br>Gurugram</p>
+      <div class="body">
+        <h3>PricewaterhouseCoopers (PwC) Services LLP</h3>
+        <p class="sub">Technology Consultant Intern</p>
+        <ul class="points">
+          <li>Used SQL, Python and Excel in data-analysis workflows during a technology consulting internship.</li>
+        </ul>
+        <ul class="tags"><li>SQL</li><li>Python</li><li>Excel</li></ul>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="block" id="projects">
+  <div class="wrap">
+    <h2>Projects</h2>
+
+    <article class="proj c1">
+      <div class="txt">
+        <p class="kicker">Compilers · Feb – Apr 2025</p>
+        <h3>End-to-end C++ to x86 compiler</h3>
+        <p>A compiler for a subset of C++ that takes source text all the way down to x86 assembly.</p>
+        <ul class="points">
+          <li>Handles expressions, control flow, arrays, pointers, structs and functions.</li>
+          <li>Every stage is my own: lexer, parser and AST, semantic checks, Three-Address Code and the x86 code generator.</li>
+        </ul>
+        <ul class="tags"><li>C++</li><li>Flex</li><li>Bison</li><li>x86</li></ul>
+      </div>
+      <div class="vis">
+        <ol class="pipeline" aria-label="Compiler pipeline">
+          <li><div><b>Lexical analysis</b><span>Flex turns source text into tokens</span></div></li>
+          <li><div><b>Parsing</b><span>A Bison grammar builds the AST</span></div></li>
+          <li><div><b>Semantic checks</b><span>Types and scopes are validated</span></div></li>
+          <li><div><b>Three-Address Code</b><span>The AST is lowered to an intermediate form</span></div></li>
+          <li><div><b>x86 code generation</b><span>TAC becomes assembly</span></div></li>
+        </ol>
+      </div>
+    </article>
+
+    <article class="proj c2">
+      <div class="txt">
+        <p class="kicker">Machine learning · Feb – Apr 2025</p>
+        <h3>Transformer-enhanced Lyapunov-guided DRL</h3>
+        <p>A deep reinforcement learning model for dynamic mobile-edge offloading: deciding which computing tasks a mobile device should hand to a nearby edge server.</p>
+        <ul class="points">
+          <li>Adds a Transformer to a Lyapunov-guided DRL approach, so the model saves energy while keeping task queues stable.</li>
+          <li>In project experiments it used <strong>about 32% less energy</strong> and gave <strong>30% better queue stability</strong> than CNN baselines.</li>
+        </ul>
+        <ul class="tags"><li>Python</li><li>TensorFlow</li><li>NumPy</li></ul>
+      </div>
+      <div class="vis">
+        <div class="meter">
+          <h4>Energy consumption <small>lower is better</small></h4>
+          <div class="bar"><span>CNN baseline</span><span class="track"><i style="--w:100%"></i></span><b>100</b></div>
+          <div class="bar ours"><span>This model</span><span class="track"><i style="--w:68%"></i></span><b>68</b></div>
+        </div>
+        <div class="meter">
+          <h4>Queue stability <small>higher is better</small></h4>
+          <div class="bar"><span>CNN baseline</span><span class="track"><i style="--w:77%"></i></span><b>100</b></div>
+          <div class="bar ours"><span>This model</span><span class="track"><i style="--w:100%"></i></span><b>130</b></div>
+        </div>
+        <p class="cap">Approximate results from project experiments, indexed so the CNN baseline is 100.</p>
+      </div>
+    </article>
+
+    <article class="proj c3 wide">
+      <div class="txt">
+        <p class="kicker">Mobile · Mar – Apr 2024</p>
+        <h3>FitPal</h3>
+        <p>A fitness app that turns healthy habits into a game, with streaks, XP, leaderboards, challenges and competitions between friends.</p>
+        <ul class="points">
+          <li><strong>Photo calorie logging:</strong> photograph your food and a Keras image model recognises it across 36 fruit and vegetable classes.</li>
+          <li><strong>Calories burnt:</strong> an XGBoost model estimates the energy spent in each workout, served from a Flask API.</li>
+          <li>Flutter app of about 100 Dart files on Firebase Auth, Firestore, Storage and push messaging, with BMI guidance, workout plans, timers, rep counts and water tracking.</li>
+          <li>Built with a team of eight.</li>
+        </ul>
+        <ul class="tags"><li>Flutter</li><li>Dart</li><li>Firebase</li><li>Flask</li><li>Keras</li><li>XGBoost</li></ul>
+        <a class="code" href="https://github.com/avalachaitanya2004/fitpal" target="_blank" rel="noopener">View the code on GitHub</a>
+      </div>
+      <div class="vis">
+        <div class="phones">
+          <img src="fitpal-1.jpg" alt="FitPal home screen showing calories left, steps and water" width="360" height="800">
+          <img src="fitpal-2.jpg" alt="FitPal camera screen scanning a food item" width="360" height="800">
+          <img src="fitpal-3.jpg" alt="FitPal fitness challenges screen" width="360" height="800">
+          <img src="fitpal-4.jpg" alt="FitPal custom workout screen with exercises, time, XP and calories" width="360" height="800">
+        </div>
+        <p class="cap">Screens from the app: daily summary, food scan, challenges and a custom workout.</p>
+      </div>
+    </article>
+
+    <article class="proj c4">
+      <div class="txt">
+        <p class="kicker">Web · Sep – Nov 2023</p>
+        <h3>Classroom360</h3>
+        <p>A classroom web app designed for a tablet on every bench. Teachers run live class rooms; students get their courses, announcements, assignments, grades, calendar and class material in one place.</p>
+        <ul class="points">
+          <li>Live rooms with real-time chat over Django Channels, a seat map and attendance records.</li>
+          <li>16 data models and separate teacher and student views, with assignment submission and grading.</li>
+          <li>Team of five. <strong>My part:</strong> the password reset and change flows, the class-ended screen and the About page.</li>
+        </ul>
+        <ul class="tags"><li>JavaScript</li><li>Django</li><li>Channels</li><li>SQLite</li></ul>
+        <a class="code" href="https://github.com/avalachaitanya2004/classroom360" target="_blank" rel="noopener">View the code on GitHub</a>
+      </div>
+      <div class="vis">
+        <div class="seats" role="img" aria-label="Illustration of a 30-seat classroom with five seats marked absent"><i></i><i></i><i></i><i class="off"></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="off"></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="off"></i><i></i><i></i><i></i><i></i><i class="off"></i><i></i><i></i><i></i><i></i><i class="off"></i><i></i><i></i></div>
+        <p class="key"><span><i></i>present</span><span><i class="off"></i>absent</span></p>
+        <p class="cap">An illustration of the seat map and attendance idea. The demo database has 30 students, 6 teachers and 1 admin across 6 branches.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="block" id="skills">
+  <div class="wrap">
+    <h2>Skills</h2>
+    <dl class="skills">
+      <div><dt>Languages</dt><dd><span>C++</span><span>Python</span><span>JavaScript</span><span>TypeScript</span><span>SQL</span><span>Dart</span></dd></div>
+      <div><dt>Frameworks, web</dt><dd><span>Node.js</span><span>Next.js</span><span>Django</span><span>Flutter</span><span>HTML</span><span>CSS</span></dd></div>
+      <div><dt>Data, ML</dt><dd><span>TensorFlow</span><span>NumPy</span><span>SciPy</span><span>Firebase</span><span>SQLite</span></dd></div>
+      <div><dt>Tools</dt><dd><span>Git</span><span>GitHub</span><span>Flex</span><span>Bison</span></dd></div>
+      <div><dt>Core areas</dt><dd><span>Data Structures and Algorithms</span><span>Compiler Design</span><span>Software Testing</span><span>Security Fundamentals</span></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="block" id="education">
+  <div class="wrap two">
+    <div>
+      <h2>Education</h2>
+      <div class="edu">
+        <h3>Indian Institute of Technology Roorkee</h3>
+        <p class="sub">B.Tech. in Computer Science and Engineering</p>
+        <p class="when">2022 – 2026 · CGPA 7.442 / 10</p>
+      </div>
+    </div>
+    <div>
+      <h2>Achievements</h2>
+      <ul class="ach">
+        <li><b class="n">1357</b><span>All India Rank in JEE Advanced 2022</span></li>
+        <li><b class="n">1475</b><span>Maximum Codeforces rating, Specialist</span></li>
+        <li><b class="n">AZ-900</b><span>Microsoft Azure Fundamentals, plus Azure Data Fundamentals (DP-900)</span></li>
+        <li><b class="n">SQL</b><span>HackerRank certifications in Advanced SQL and Software Engineering Intern skills</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2>Let's talk</h2>
+    <p>I'm interested in building reliable software for AI-first and security-conscious products. Email is the fastest way to reach me.</p>
+    <div class="mail">
+      <a class="addr" href="mailto:avalachaitanya2004@gmail.com">avalachaitanya2004@gmail.com</a>
+      <button class="btn" type="button" id="copy">Copy email</button>
+    </div>
+    <div class="elsewhere">
+      <a class="btn" href="https://github.com/avalachaitanya2004" target="_blank" rel="noopener">github.com/avalachaitanya2004</a>
+      <a class="btn" href="https://www.linkedin.com/in/chaitanya-avala-59592b2a3" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <footer>Chaitanya Avala · Bengaluru, India</footer>
+  </div>
+</section>
+
+<script>
+(function () {
+  var STAGES = [
+    { note: "The five stages my compiler runs, shown on a toy function. Pick a stage to follow the code down to assembly. Illustrative, not captured output.",
+      lines: [
+        "// one function, five stages",
+        "",
+        "int ship(int orders) {",
+        "    int uplift = orders / 100;",
+        "    return orders + uplift;",
+        "}"
+      ] },
+    { note: "Lexical analysis. Flex rules cut the source into a flat stream of tokens.",
+      lines: [
+        "; lexer output",
+        "KW_INT   ID(ship)   LPAREN",
+        "KW_INT   ID(orders) RPAREN  LBRACE",
+        "KW_INT   ID(uplift) ASSIGN",
+        "ID(orders)  DIV  INT_LIT(100)  SEMI",
+        "KW_RETURN",
+        "ID(orders)  PLUS  ID(uplift)   SEMI",
+        "RBRACE"
+      ] },
+    { note: "Parsing. The Bison grammar turns tokens into a tree, and semantic checks confirm every type and name.",
+      lines: [
+        "; abstract syntax tree",
+        "FunctionDef ship : int",
+        "├─ Param orders : int",
+        "└─ Block",
+        "   ├─ VarDecl uplift : int",
+        "   │  └─ BinaryOp /",
+        "   │     ├─ Ident orders",
+        "   │     └─ IntLit 100",
+        "   └─ Return",
+        "      └─ BinaryOp +",
+        "         ├─ Ident orders",
+        "         └─ Ident uplift"
+      ] },
+    { note: "Three-Address Code. The tree is flattened so each instruction does one operation.",
+      lines: [
+        "; three-address code",
+        "ship:",
+        "    t1 = orders / 100",
+        "    uplift = t1",
+        "    t2 = orders + uplift",
+        "    return t2"
+      ] },
+    { note: "Code generation. Each TAC instruction becomes x86, with locals on the stack frame.",
+      lines: [
+        "; x86, cdecl",
+        "ship:",
+        "    push ebp",
+        "    mov  ebp, esp",
+        "    sub  esp, 4",
+        "    mov  eax, [ebp+8]     ; orders",
+        "    cdq",
+        "    mov  ecx, 100",
+        "    idiv ecx",
+        "    mov  [ebp-4], eax     ; uplift",
+        "    mov  eax, [ebp+8]",
+        "    add  eax, [ebp-4]",
+        "    leave",
+        "    ret"
+      ] }
+  ];
+
+  var listing = document.getElementById("listing");
+  var note = document.getElementById("note");
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".stages button"));
+  var current = 0;
+  var timer = null;
+
+  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function paint(line) {
+    var m = line.match(/^(.*?)((?:\/\/|;\s).*|;.*)?$/);
+    var code = m[1] || "", com = m[2] || "";
+    // keep a trailing C++ semicolon as code, not a comment
+    if (com && com.charAt(0) === ";" && /\S/.test(code) && !/^;\s/.test(com)) { code += com; com = ""; }
+    if (com === ";" ) { code += com; com = ""; }
+    var html = esc(code)
+      .replace(/\b(int|return)\b/g, '<span class="k">$1</span>')
+      .replace(/^([a-z_]\w*:)$/, '<span class="k">$1</span>');
+    if (com) html += '<span class="c">' + esc(com) + "</span>";
+    return html || " ";
+  }
+  function show(i, animate) {
+    current = i;
+    listing.innerHTML = STAGES[i].lines.map(function (l, n) {
+      return '<span class="ln" style="--i:' + n + '">' + paint(l) + "</span>";
+    }).join("");
+    listing.classList.toggle("swap", !!animate);
+    listing.setAttribute("aria-labelledby", "tab-" + i);
+    note.textContent = STAGES[i].note;
+    tabs.forEach(function (t, n) {
+      t.setAttribute("aria-selected", n === i ? "true" : "false");
+      t.tabIndex = n === i ? 0 : -1;
+    });
+  }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+  tabs.forEach(function (t, n) {
+    t.addEventListener("click", function () { stop(); show(n, true); });
+    t.addEventListener("keydown", function (e) {
+      var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+      if (!d) return;
+      e.preventDefault(); stop();
+      var next = (n + d + tabs.length) % tabs.length;
+      show(next, true); tabs[next].focus();
+    });
+  });
+  listing.addEventListener("pointerdown", stop);
+
+  show(0, false);
+
+  // One pass through the pipeline on load, then it rests on the assembly.
+  var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!calm) {
+    timer = setInterval(function () {
+      if (current >= STAGES.length - 1) { stop(); return; }
+      show(current + 1, true);
+    }, 2600);
+  }
+
+  var copy = document.getElementById("copy");
+  copy.addEventListener("click", function () {
+    var done = function (ok) {
+      copy.textContent = ok ? "Copied" : "Select the address to copy";
+      setTimeout(function () { copy.textContent = "Copy email"; }, 2200);
+    };
+    try { navigator.clipboard.writeText("avalachaitanya2004@gmail.com").then(function () { done(true); }, function () { done(false); }); }
+    catch (e) { done(false); }
+  });
+})();
+</script>
+</body>
+</html>
